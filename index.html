@@ -12,7 +12,7 @@
       body {
         margin: 0;
         padding-bottom: 3rem;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
           Helvetica, Arial, sans-serif;
         display: flex;
         flex-direction: column;
@@ -83,13 +83,13 @@
       </div>
     </main>
     <aside></aside>
-
-    <script src="/socket.io/socket.io.js"></script>
+    
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-      const socket = io("localhost:3000");
+      const socket = io('https://socket-io-dart.onrender.com/');
       let id;
 
-      socket.on("connect", () => {
+      socket.on('connect', () => {
         console.log(socket.id);
         id = socket.id;
       });
@@ -98,16 +98,16 @@
       let hitData;
       const maxStep = 5;
       const result = [];
-      const passiveStepsElement = document.querySelector(".passive-steps");
-      const stepsElement = document.querySelector(".steps");
-      const aside = document.querySelector("aside");
+      const passiveStepsElement = document.querySelector('.passive-steps');
+      const stepsElement = document.querySelector('.steps');
+      const aside = document.querySelector('aside');
 
       function render() {
         const stepElement = stepsElement.lastElementChild;
         aside.appendChild(stepElement);
-        stepElement.classList.add("passive");
+        stepElement.classList.add('passive');
         const dataStep = parseInt(stepElement.dataset.step);
-        if (dataStep == 1) stepElement.classList.add("hide");
+        if (dataStep == 1) stepElement.classList.add('hide');
         if (currentStep == maxStep) renderResult();
         else renderStep();
       }
@@ -116,7 +116,7 @@
         result.push(hitData);
         const text =
           hitData.number == 0
-            ? "0"
+            ? '0'
             : `${hitData.number}x${hitData.factor}=${hitData.total}`;
         stepsElement.innerHTML += `
           <div class="step" data-step="${currentStep}" style="--step:${currentStep}">
@@ -173,19 +173,19 @@
         event.preventDefault();
         const resultStep = document.querySelector(`[data-step="${maxStep}"]`);
         for (const child of resultStep.children) {
-          child.classList.toggle("hide");
+          child.classList.toggle('hide');
         }
         const formData = new FormData(event.target);
-        const email = formData.get("email");
-        socket.emit("submit email", { email });
+        const email = formData.get('email');
+        socket.emit('submit email', { email });
       }
 
       window.start = function () {
-        socket.emit("start", { id });
+        socket.emit('start', { id });
       };
 
-      socket.on("hit dart", function (msg) {
-        console.log("hit dart");
+      socket.on('hit dart', function (msg) {
+        console.log('hit dart');
         console.log(msg);
         hitData = msg;
         nextStep();
